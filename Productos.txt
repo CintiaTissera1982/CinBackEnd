@@ -16,5 +16,11 @@
     "title": "JUGO BAGGIO 8 X 1000 CC",
     "price": 2300,
     "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
+  },
+  {
+    "id": 4,
+    "title": "VINO TORO 12 X 1000 CC BLANCOOOO",
+    "price": 3020,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
   }
 ]
