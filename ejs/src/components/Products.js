@@ -1,6 +1,6 @@
-const fs = require("fs");
+import fs from 'fs'
 
-class Contenedor{
+class Products{
     constructor(nameFile){
         this.nameFile = nameFile;
     }
@@ -88,4 +88,4 @@ class Contenedor{
     }
 }
 
-module.exports = Contenedor;
+export { Products };

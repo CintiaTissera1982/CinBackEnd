@@ -1,0 +1,20 @@
+html 
+    head 
+        title 
+    body 
+        div 
+            h1 Alta Producto
+            form( action="/productos" method="post")
+                div
+                    label( for="name") Descripción
+                    input( type="text" id="name" name="title" required)
+                div
+                    label( for="price") Precio
+                    input( type="text" id="price" name="price" required)
+                div
+                    label( for="img") URL Foto
+                    input( type="text" id="img" name="thumbnail" required)
+                div
+                    button( type="submit") Confirmar
+                div
+                    a( href="/productos") Ver Productos

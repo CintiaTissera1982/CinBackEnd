@@ -1,0 +1,23 @@
+html 
+    head 
+        title 
+    body 
+        div 
+            h1 LISTA DE PRODUCTOS
+            table
+                thead
+                    tr
+                        th Cod Prod
+                        th Descripción
+                        th Precio
+                        th Imagen                    
+                tbody
+                    each producto in products
+                        tr
+                            th #{producto.id}
+                            td #{producto.title}
+                            td #{producto.price}
+                            td
+                                img( src= producto.thumbnail alt="img" width="50")
+            div
+                a(href="/") Alta Productos 
