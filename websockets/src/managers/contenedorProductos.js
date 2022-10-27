@@ -1,8 +1,9 @@
-import fs from 'fs'
+const fs = require("fs");
+const path = require("path");
 
-class Products{
+class Contenedor{
     constructor(nameFile){
-        this.nameFile = nameFile;
+        this.nameFile = path.join(__dirname,"..",`files/${nameFile}`);
     }
 
     save = async(product)=>{
@@ -45,13 +46,16 @@ class Products{
     }
 
     getAll = async()=>{
-        try {
-            const contenido = await fs.promises.readFile(this.nameFile,"utf8");
-            const productos = JSON.parse(contenido);
-            return productos
-        } catch (error) {
-            console.log(error)
+        if(fs.existsSync(this.nameFile)){
+            try {
+                const contenido = await fs.promises.readFile(this.nameFile,"utf8");
+                const productos = JSON.parse(contenido);
+                return productos
+            } catch (error) {
+                console.log(error)
+            }
         }
+        return {status:'error',message:"No hay productos"}
     }
 
     deleteById = async(id)=>{
@@ -88,4 +92,4 @@ class Products{
     }
 }
 
-export { Products };
+module.exports = Contenedor;

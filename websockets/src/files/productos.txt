@@ -19,44 +19,32 @@
   },
   {
     "id": 4,
-    "title": "VINO TORO 12 X 1000 CC BLANCOOOO",
+    "title": "VINO TORO 12 X 1000 CC BLANCO",
     "price": 3020,
     "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
   },
   {
     "id": 5,
-    "title": "producto nuevo",
-    "price": "22",
+    "title": "adadsa",
+    "price": "3",
     "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
   },
   {
     "id": 6,
-    "title": "productos pruebaaa",
-    "price": "123",
-    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
-  },
-  {
-    "id": 7,
-    "title": "rew",
-    "price": "6",
-    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
-  },
-  {
-    "id": 8,
-    "title": "weqe",
+    "title": "xdzxdsxz",
     "price": "2",
     "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
   },
   {
-    "id": 9,
-    "title": "ggg",
-    "price": "4",
+    "id": 7,
+    "title": "dccs",
+    "price": "3",
     "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
   },
   {
-    "id": 10,
-    "title": "gf",
-    "price": "4",
+    "id": 8,
+    "title": "e33",
+    "price": "3",
     "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
   }
 ]
