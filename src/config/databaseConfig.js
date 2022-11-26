@@ -1,0 +1,39 @@
+import path from "path";
+import {fileURLToPath} from 'url';
+import mongoose, { now } from "mongoose";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
+export const options = {
+    fileSystem: {
+        pathProducts: 'productos.json',
+        pathCarts: 'carritos.json',
+    },
+    // mariaDB:{
+    //     client:"mysql",
+    //     connection:{
+    //         host:"127.0.0.1",
+    //         user:"root",
+    //         password:"",
+    //         database:"coderhousedb"
+    //     }
+    // },
+    sqliteDB:{
+        client:"sqlite3",
+        connection:{
+            filename:path.join(__dirname , "../DB/ecommerce.sqlite")
+             
+        },
+        useNullAsDefault:true
+    },
+    mongoDB:{
+       URL: "mongodb+srv://ommi:1234@ommidistribuidora.xof6nfa.mongodb.net/ecommerce?retryWrites=true&w=majority"
+    },
+    firebase:{
+        serviceKey:{},
+        databaseUrl:""
+    }
+}

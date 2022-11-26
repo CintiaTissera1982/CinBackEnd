@@ -22,11 +22,11 @@
   {
     "id": 3,
     "timestamp": "4/11/2022",
-    "nombre": "JUGO BAGGIO DURAZNO",
-    "descripcion": "JUGO DE MESA",
-    "codigo": 1002202,
+    "nombre": "JUGO BAGGIO MANZANA 8 X 1L",
+    "descripcion": "JUGO DE FRUTAS",
+    "codigo": 1222203,
     "url": "/foto2",
-    "precio": 1000,
-    "stock": 30
+    "precio": 114,
+    "stock": 130
   }
 ]
