@@ -1,25 +1,32 @@
 const socketClient = io();
 
-//captura el valor del email del usuario
+//captura el formulario y lo agrega al usuario
 let user;
 Swal.fire({
-    title:"Hola usuario",
-    text:"bienvenido, ingresa tu usario",
-    input:"text",
-    customClass: {
-        validationMessage: 'my-validation-message'
-    },
-    preConfirm: (value) => {
-        if (!value) {
-            Swal.showValidationMessage(
-                '<i class="fa fa-info-circle"></i>Nombre obligatorio'
-            )
+    title: 'Formulario perfil',
+    html: `<input type="text" id="email" class="swal2-input" placeholder="Correo">
+    <input type="text" id="name" class="swal2-input" placeholder="Nombre">
+    <input type="text" id="lastname" class="swal2-input" placeholder="Apellido">`,
+    confirmButtonText: 'Iniciar',
+    focusConfirm: false,
+    preConfirm: () => {
+        const email = Swal.getPopup().querySelector('#email').value;
+        const name = Swal.getPopup().querySelector('#name').value;
+        const lastname = Swal.getPopup().querySelector("#lastname").value;
+        if (!email || !name || !lastname) {
+            Swal.showValidationMessage(`Pro favor complete el formulario`);
         }
+        return { email, name, lastname}
     },
-    allowOutsideClick:false
-}).then(respuesta=>{
-    user = respuesta.value;
-    document.getElementById("userEmail").innerHTML = `<strong>Bienvenido ${respuesta.value}!!</strong>`;
+    allowOutsideClick: false
+}).then((result) => {
+    Swal.fire(`
+      Email: ${result.value.email}
+      Nombre: ${result.value.name}
+      Apellido: ${result.value.lastname}
+    `.trim());
+    console.log(result.value);
+    user = result.value;
 });
 
 //**************//
@@ -53,17 +60,28 @@ socketClient.on("products",async(data)=>{
     productsContainer.innerHTML = htmlTable;
 })
 
+//esquemas
+const authorSchema = new normalizr.schema.Entity("authors",{}, {idAttribute:"email"});
+const messageSchema = new normalizr.schema.Entity("messages", {author: authorSchema});
+const chatSchema = new normalizr.schema.Entity("chat", {
+    messages:[messageSchema]
+}, {idAttribute:"id"});
+
 
 //**************//
 //chat
 socketClient.on("messages",async (dataMsg)=>{
+    console.log("dataMsg", dataMsg);
+    //de-normalizar
+    const normalData = normalizr.denormalize(dataMsg.result,chatSchema,dataMsg.entities);
+    // console.log("normalData",normalData)
     let messageElements = "";
-    dataMsg.forEach(msg=>{
-        messageElements += `<div><strong>${msg.user} - ${msg.timestamp}:</strong> ${msg.message}</div>`;
+    normalData.messages.forEach(msg=>{
+        messageElements += `<div><strong>${msg.author.name} - ${msg.timestamp}:</strong> ${msg.text}</div>`;
     })
     const chatContainer = document.getElementById("chatContainer");
-    chatContainer.innerHTML = dataMsg.length>0 ? messageElements : '';
-})
+    chatContainer.innerHTML = normalData.messages.length>0 ? messageElements : '';
+});
 
 //envio del mensaje del chat
 const chatInput = document.getElementById("chatMsg");
@@ -71,9 +89,9 @@ const chatButton = document.getElementById("sendMsg");
 
 chatButton.addEventListener("click",()=>{
     socketClient.emit("newMessage",{
-        user:user,
+        author:user,
+        text:chatInput.value,
         timestamp: new Date().toLocaleString(),
-        message: chatInput.value
     });
     chatInput.value = "";
 })
