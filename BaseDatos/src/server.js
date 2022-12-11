@@ -1,116 +1,119 @@
-const express = require('express');
-const options = require("./config/dbConfig");
-const {productsRouter, products} = require('./routes/products');
-const handlebars = require('express-handlebars');
-const {Server} = require("socket.io");
-const {normalize, schema} = require("normalizr");
+//importaciones
+import express from "express";
+import session from "express-session";
+import handlebars from "express-handlebars";
+import { dirname } from "path";
+import {fileURLToPath} from "url";
 
 
-const {faker} = require('@faker-js/faker')
-faker.locale = "es";
-
- 
-const Contenedor = require("./managers/contenedorProductos");
-const ContenedorChat = require('./managers/contenedorChat');
-const ContenedorSql = require("./managers/contenedorSql");
-
-//service
-const productosApi = new ContenedorSql(options.mariaDB, "products");
-const chatApi = new ContenedorChat("chat.txt");
-
-//server
+//servidor express
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended:true}))
-app.use(express.static(__dirname+'/public'))
-
-//configuracion template engine handlebars
-app.engine('handlebars', handlebars.engine());
-app.set('views', __dirname+'/views');
-app.set('view engine', 'handlebars');
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, ()=>console.log(`Server listening on port ${PORT}`));
 
 
-//normalizacion
-//creamos los esquemas.
-//esquema del author
-const authorSchema = new schema.Entity("authors",{}, {idAttribute:"email"});
+//archivos estaticos
+const __dirname = dirname(fileURLToPath(import.meta.url)); //ruta server.js
+app.use(express.static(__dirname+"/public"));//ruta carpeta public
 
-//esquema mensaje
-const messageSchema = new schema.Entity("messages", {author: authorSchema});
 
-//esquema global para el nuevo objeto
-const chatSchema = new schema.Entity("chat", {
-    messages:[messageSchema]
-}, {idAttribute:"id"});
+//motor de plantilla
+//inicializar el motor de plantillas
+app.engine(".hbs",handlebars.engine({extname: '.hbs'}));
+//ruta de las vistas
+app.set("views", __dirname+"/views");
+//vinculacion del motor a express
+app.set("view engine", ".hbs");
 
-//aplicar la normalizacion
-//crear una funcion que la podemos llamar para normalizar la data
-const normalizarData = (data)=>{
-    const normalizeData = normalize({id:"chatHistory", messages:data}, chatSchema);
-    return normalizeData;
-};
 
-const normalizarMensajes = async()=>{
-    const results = await chatApi.getAll();
-    const messagesNormalized = normalizarData(results);
-    // console.log(JSON.stringify(messagesNormalized, null,"\t"));
-    return messagesNormalized;
+//interpretacion de formato json desde el cliente
+app.use(express.json()); //lectura de json desde el cuerpo de la petición.
+app.use(express.urlencoded({extended:true})); //lectura de json desde un metodo post de formulario
+
+
+//configuracion de la sesion
+app.use(session({
+    secret:"claveSecreta", //clave de encriptación de la sesión
+
+    //config para guardar en la memoria del servidor
+    resave:true,
+    saveUninitialized:true,
+}));
+
+
+//middleware para validar la sesión del usuario
+const checkSession = (req,res,next)=>{
+    //validamos si la sesión esta activa
+    if(req.session.user){
+       const result = (req.session.user === undefined)  ? res.render("home",{users : ""}) : res.render("home",{users : req.session.user.name })
+    } else{
+        next();
+    }
 }
 
-// routes
-//view routes
-app.get('/', async(req,res)=>{
-    res.render('home')
-})
+//rutas asociadas a las páginas del sitio web
+app.get("/",(req,res)=>{
+    const result = (req.session.user === undefined)  ? res.render("home",{users : ""}) : res.render("home",{users : req.session.user.name })
+});
 
-//express server
-const server = app.listen(8080,()=>{
-    console.log('listening on port 8080')
-})
+app.get("/registro",checkSession,(req,res)=>{
+    res.render("signup")
+});
 
+app.get("/inicio-sesion",checkSession,(req,res)=>{
+    res.render("login")
+});
 
-app.get("/api/productos-test",(req,res)=>{
-    let arrayProducts=[];
-    for(let i=0;i<5;i++){
-        arrayProducts.push(
-            {
-                id: id = faker.datatype.uuid(),
-                title: faker.commerce.product(),
-                price: price = faker.finance.amount(),
-                thumbnail: faker.image.business()             
-            }
-        )
+app.get("/perfil",(req,res)=>{
+    if(req.session.user){
+        res.render("profile");
+    } else{
+        res.send("<div>Debes <a href'/inicio-sesion'>inciar sesion</a> o <a href='/registro'>registrarte</a></div>")
     }
-    
-    res.render('products',{products:arrayProducts})
-})
+});
 
+let users = [];
 
-//websocket server
-const io = new Server(server);
+//rutas de autenticacion
+app.post("/signup",(req,res)=>{
+    console.log("signup")
+    console.log(req.body)
+    const newUser = req.body;
+    //el usuario existe?
+    const userExists = users.find(elm=>elm.email === newUser.email);
+    if(userExists){
+        res.render("signup",{error:"usuario ya registrado"});
+    } else{
+        users.push(newUser);
+        req.session.user = newUser;
+        const result = (req.session.user === undefined)  ? res.render("home",{users : ""}) : res.render("home",{users : req.session.user.name })
+    }
+});
 
+app.post("/login",(req,res)=>{
+    console.log("login")
+    console.log(users)
+    const user = req.body;
+    //el usuario existe
+    const userExists = users.find(elm=>elm.email === user.email);
+    if(userExists){
+        //validar la contraseña
+        console.log("veo userExists")
+        console.log(userExists)
+        if(userExists.password === user.password){
+            req.session.user = user;
+            console.log(userExists.name)
+            const result = (userExists.name === undefined)  ? res.render("home",{users : ""}) : res.render("home",{users : userExists.name })
+           // const result = (req.session.user === undefined)  ? res.render("home",{users : ""}) : res.render("home",{users : req.session.user.name })
+        } else{
+            res.redirect("/inicio-sesion")
+        }
+    } else{
+        res.redirect("/registro");
+    }
+});
 
-//configuracion websocket
-io.on("connection",async(socket)=>{
-    //PRODUCTOS
-    //envio de los productos al socket que se conecta.
-    io.sockets.emit("products", await productosApi.getAll())
-
-    //recibimos el producto nuevo del cliente y lo guardamos con filesystem
-    socket.on("newProduct",async(data)=>{
-        await productosApi.save(data);
-        //despues de guardar un nuevo producto, enviamos el listado de productos actualizado a todos los sockets conectados
-        io.sockets.emit("products", await productosApi.getAll())
-    })
-
-    //CHAT
-    //Envio de todos los mensajes al socket que se conecta.
-    io.sockets.emit("messages", await normalizarMensajes());
-
-    //recibimos el mensaje del usuario y lo guardamos en el archivo chat.txt
-    socket.on("newMessage", async(newMsg)=>{
-        console.log(newMsg);
-        await chatApi.save(newMsg);
-        io.sockets.emit("messages", await normalizarMensajes());
-    });
-})
+app.get("/logout",(req,res)=>{
+    const result = (req.session.user === undefined)  ? res.render("logout",{users : ""}) : res.render("logout",{users : req.session.user.name, })
+    req.session.destroy();
+}); 
