@@ -5,11 +5,26 @@ import handlebars from "express-handlebars";
 import { dirname } from "path";
 import {fileURLToPath} from "url";
 
+import MongoStore from "connect-mongo";
+
 
 //servidor express
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, ()=>console.log(`Server listening on port ${PORT}`));
+
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://ommi:1234@ommidistribuidora.xof6nfa.mongodb.net/ecommerce?retryWrites=true&w=majority"
+    }),
+    secret:"claveSecreta",
+    resave:false,
+    saveUninitialized: false,
+    cookie:{
+        maxAge:600000
+    }
+}));
 
 
 //archivos estaticos
@@ -76,8 +91,6 @@ let users = [];
 
 //rutas de autenticacion
 app.post("/signup",(req,res)=>{
-    console.log("signup")
-    console.log(req.body)
     const newUser = req.body;
     //el usuario existe?
     const userExists = users.find(elm=>elm.email === newUser.email);
@@ -91,15 +104,11 @@ app.post("/signup",(req,res)=>{
 });
 
 app.post("/login",(req,res)=>{
-    console.log("login")
-    console.log(users)
     const user = req.body;
     //el usuario existe
     const userExists = users.find(elm=>elm.email === user.email);
     if(userExists){
         //validar la contraseña
-        console.log("veo userExists")
-        console.log(userExists)
         if(userExists.password === user.password){
             req.session.user = user;
             console.log(userExists.name)
