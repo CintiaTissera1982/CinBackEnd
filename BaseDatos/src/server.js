@@ -4,7 +4,11 @@ import session from "express-session";
 import handlebars from "express-handlebars";
 import { dirname } from "path";
 import {fileURLToPath} from "url";
+import passport from "passport";
 
+import bcrypt from "bcrypt"; //encriptar las contrase;as
+import MongoStore from "connect-mongo";
+import facebookStrategy  from "passport-facebook" 
 
 //servidor express
 const app = express();
@@ -12,11 +16,26 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, ()=>console.log(`Server listening on port ${PORT}`));
 
 
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://ommi:1234@ommidistribuidora.xof6nfa.mongodb.net/ecommerce?retryWrites=true&w=majority"
+    }),
+    secret:"claveSecreta",
+    resave:false,
+    saveUninitialized: false,
+    cookie:{
+        maxAge:600000
+    }
+}));
+
+
 //archivos estaticos
 const __dirname = dirname(fileURLToPath(import.meta.url)); //ruta server.js
 app.use(express.static(__dirname+"/public"));//ruta carpeta public
 
-
+//configurar passport
+app.use(passport.initialize()); //conectamos a passport con express.
+app.use(passport.session());//vinculacion entre passport y las sesiones de nuestros usuarios.
 //motor de plantilla
 //inicializar el motor de plantillas
 app.engine(".hbs",handlebars.engine({extname: '.hbs'}));
@@ -39,7 +58,20 @@ app.use(session({
     resave:true,
     saveUninitialized:true,
 }));
+//deserializar al usuario
+passport.deserializeUser((id,done)=>{
+    //validar si el usuario existe en db.
+    UserModel.findById(id,(err, userFound)=>{
+        return done(err, userFound)
+    })
+});
 
+//crear una funcion para encriptar la contrase;
+// estaesmiPass => ahjsgduyqwte234296124ahsd-hash
+const createHash = (password)=>{
+    const hash = bcrypt.hashSync(password,bcrypt.genSaltSync(10));
+    return hash;
+}
 
 //middleware para validar la sesión del usuario
 const checkSession = (req,res,next)=>{
@@ -50,6 +82,19 @@ const checkSession = (req,res,next)=>{
         next();
     }
 }
+
+
+passport.use(new facebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 //rutas asociadas a las páginas del sitio web
 app.get("/",(req,res)=>{
@@ -76,8 +121,6 @@ let users = [];
 
 //rutas de autenticacion
 app.post("/signup",(req,res)=>{
-    console.log("signup")
-    console.log(req.body)
     const newUser = req.body;
     //el usuario existe?
     const userExists = users.find(elm=>elm.email === newUser.email);
@@ -91,15 +134,11 @@ app.post("/signup",(req,res)=>{
 });
 
 app.post("/login",(req,res)=>{
-    console.log("login")
-    console.log(users)
     const user = req.body;
     //el usuario existe
     const userExists = users.find(elm=>elm.email === user.email);
     if(userExists){
         //validar la contraseña
-        console.log("veo userExists")
-        console.log(userExists)
         if(userExists.password === user.password){
             req.session.user = user;
             console.log(userExists.name)
@@ -112,6 +151,16 @@ app.post("/login",(req,res)=>{
         res.redirect("/registro");
     }
 });
+
+//login con facebook
+app.get("/login-facebook", passport.authenticate("facebookLogin"));
+app.get("/auth/facebook/callback", passport.authenticate("facebookLogin",{
+    failureRedirect:"/login",
+    failureMessage:true
+}),(req,res)=>{
+    res.redirect("/perfil")
+})
+
 
 app.get("/logout",(req,res)=>{
     const result = (req.session.user === undefined)  ? res.render("logout",{users : ""}) : res.render("logout",{users : req.session.user.name, })
