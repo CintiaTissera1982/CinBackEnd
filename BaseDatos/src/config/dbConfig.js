@@ -15,7 +15,15 @@ const options = {
         connection:{
             filename: path.join(__dirname, "../DB/ecommerce.sqlite")            
         }
+    },
+
+    facebook: {
+        id: "452373743572288",
+        secret:"065c9b44cc12c7580c9284f136f5e0a7"
+
     }
+
+
 }
 
 module.exports = options;
