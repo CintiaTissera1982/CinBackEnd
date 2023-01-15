@@ -1,4 +1,9 @@
 <h2 class="mx-5 my-2">Formulario Inicio de sesión</h2>
+<div>
+    {{#if error}}
+        <p>{{error}}</p>
+    {{/if}}
+</div>
 <div class="mx-5 my-2">
     <form action="/login" method="POST">
         <label>Correo:</label>
