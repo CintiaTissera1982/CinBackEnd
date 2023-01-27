@@ -1,0 +1,2 @@
+2023/01/26 20:55:57 [emerg] 13924#2944: CreateDirectory() "C:\CODERHOUSE\Backend\Desafio 15 Servidor con balance de carga\server-proxy\nginx/temp/client_body_temp" failed (3: El sistema no puede encontrar la ruta especificada)
+2023/01/26 20:56:08 [emerg] 10720#11008: CreateDirectory() "C:\CODERHOUSE\Backend\Desafio 15 Servidor con balance de carga\server-proxy\nginx/temp/client_body_temp" failed (3: El sistema no puede encontrar la ruta especificada)
