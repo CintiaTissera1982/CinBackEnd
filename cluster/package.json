@@ -1,0 +1,44 @@
+{
+  "name": "cluster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/server.js",
+    "create-tables": "node src/scripts/createTables.js",
+    "start-fork": "node src/server.js 8081 FORK",
+    "start-cluster": "node src/server.js 8081 CLUSTER",
+    "artillery-fork": "artillery quick --count 50 -n 40 http://localhost:8081?max=100000 > result_fork.txt",
+    "artillery-cluster": "artillery quick --count 50 -n 40 http://localhost:8081?max=100000 > result_cluster.txt"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "connect-mongo": "^4.6.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.7",
+    "express-session": "^1.17.3",
+    "knex": "^2.4.2",
+    "minimist": "^1.2.7",
+    "mongoose": "^6.9.0",
+    "mysql": "^2.18.1",
+    "normalizr": "^3.6.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "pino": "^8.8.0",
+    "socket.io": "^4.5.4",
+    "sqlite3": "^5.1.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
