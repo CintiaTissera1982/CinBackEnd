@@ -1,11 +1,8 @@
 import path from "path";
 import {fileURLToPath} from 'url';
-import mongoose, { now } from "mongoose";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-
 
 export const options = {
     fileSystem: {
@@ -25,15 +22,14 @@ export const options = {
         client:"sqlite3",
         connection:{
             filename:path.join(__dirname , "../DB/ecommerce.sqlite")
-             
         },
         useNullAsDefault:true
-    },
-    mongoDB:{
-       URL: "mongodb+srv://ommi:1234@ommidistribuidora.xof6nfa.mongodb.net/ecommerce?retryWrites=true&w=majority"
     },
     firebase:{
         serviceKey:{},
         databaseUrl:""
+    },
+    mongoDB:{
+        mongoUrl:"mongodb+srv://ommi:1234@ommidistribuidora.xof6nfa.mongodb.net/ecommerce?retryWrites=true&w=majority"
     }
 }

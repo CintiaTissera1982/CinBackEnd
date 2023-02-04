@@ -13,7 +13,7 @@ class ContenedorArchivo {
 
     async getById(id) {
         const objects = await this.getAll()
-        const index = objects.findIndex(element=> element.id === id);
+        const index = objects.findIndex(element=> element.id === parseInt(id));
         if (index === -1) {
             return {message:`Error al buscar: no se encontró el id ${id}`, error:true};
         } else {
@@ -54,11 +54,11 @@ class ContenedorArchivo {
 
     async updateById(info, id) {
         const objects = await this.getAll()
-        const index = objects.findIndex(element=> element.id === id)
+        const index = objects.findIndex(element=> element.id === parseInt(id))
         if (index == -1) {
             return {message:`Error al actualizar: no se encontró el id ${id}`};
         } else {
-            objects[index] = { ...info, id }
+            objects[index] = { ...info, id: parseInt(id) }
             try {
                 await fs.promises.writeFile(this.filename, JSON.stringify(objects, null, 2))
                 return {message:"Update successfully"}
@@ -70,7 +70,7 @@ class ContenedorArchivo {
 
     async deleteById(id) {
         const objects = await this.getAll();
-        const index = objects.findIndex(element=> element.id === id);
+        const index = objects.findIndex(element=> element.id === parseInt(id));
         if (index == -1) {
             return {message:`Error al borrar: no se encontró el id ${id}`};
         }

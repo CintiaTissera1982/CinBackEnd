@@ -1,34 +1,10 @@
 [
   {
     "id": 1,
-    "timestamp": "4/11/2022",
-    "productos": [
-      {
-        "id": 1,
-        "timestamp": "4/11/2022",
-        "nombre": "VINO DON ERNESTO BLANCO 12 X 1",
-        "descripcion": "VINO DE MESA",
-        "codigo": 1002202,
-        "url": "/foto2",
-        "precio": 614,
-        "stock": 150
-      }
-    ]
-  },
-  {
-    "id": 2,
-    "timestamp": "4/11/2022",
-    "productos": [
-      {
-        "id": 2,
-        "timestamp": "4/11/2022",
-        "nombre": "VINO DON ERNESTO TINTO",
-        "descripcion": "VINO DE MESA",
-        "codigo": 1002202,
-        "url": "/foto2",
-        "precio": 814,
-        "stock": 130
-      }
-    ]
+    "products": [
+      1,
+      4
+    ],
+    "timestamp": "11/14/2022"
   }
 ]

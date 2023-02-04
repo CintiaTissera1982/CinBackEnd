@@ -1,0 +1,2 @@
+[2023-01-26T20:18:29.763] [FATAL] default - Hubo un error al conectar la base de datos MongoServerError: bad auth : authentication failed
+[2023-01-30T17:19:35.408] [FATAL] default - Hubo un error al conectar la base de datos MongoServerError: bad auth : authentication failed
