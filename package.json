@@ -1,25 +1,29 @@
 {
-  "type": "module",
-  "name": "proyecto-final",
+  "name": "ommi-dist---final",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "create-tables": "node src/scripts/createTables.js",
     "start": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.0.3",
+    "bcrypt": "^5.1.0",
+    "connect-mongo": "^4.6.0",
     "express": "^4.18.2",
-    "gitignore": "^0.7.0",
-    "knex": "^2.3.0",
-    "mongoose": "^6.7.2",
+    "express-session": "^1.17.3",
+    "knex": "^2.4.2",
+    "log4js": "^6.7.1",
+    "mongoose": "^6.9.0",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.20",
-    "sqlite3": "^5.1.2"
+    "nodemailer": "^6.9.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "sqlite3": "^5.1.4",
+    "twilio": "^3.84.1"
   }
 }

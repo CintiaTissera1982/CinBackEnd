@@ -1,32 +1,14 @@
 [
   {
     "id": 1,
-    "timestamp": "4/11/2022",
-    "nombre": "VINO DON ERNESTO BLANCO 12 X 1",
-    "descripcion": "VINO DE MESA",
-    "codigo": 1002202,
-    "url": "/foto2",
-    "precio": 614,
-    "stock": 150
+    "title": "camisa",
+    "price": 87,
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_990732-MCO31098832042_062019-W.jpg"
   },
   {
     "id": 2,
-    "timestamp": "4/11/2022",
-    "nombre": "VINO DON ERNESTO TINTO",
-    "descripcion": "VINO DE MESA",
-    "codigo": 1002202,
-    "url": "/foto2",
-    "precio": 814,
-    "stock": 130
-  },
-  {
-    "id": 3,
-    "timestamp": "4/11/2022",
-    "nombre": "JUGO BAGGIO MANZANA 8 X 1L",
-    "descripcion": "JUGO DE FRUTAS",
-    "codigo": 1222203,
-    "url": "/foto2",
-    "precio": 114,
-    "stock": 130
+    "title": "maleta",
+    "price": 400,
+    "thumbnail": "https://panamericana.vteximg.com.br/arquivos/ids/261725-1080-1080/cuaderno-5-materias-argollado-incolors-de-hojas-cuadriculadas-7707668554700.jpg?v=636383267550730000"
   }
 ]

@@ -1,7 +1,6 @@
 import {options} from "../config/databaseConfig.js";
-import {productModel} from "../models/product.js"
-import { cartModel} from "../models/cart.js"
-import { sequenceModel} from "../models/sequenceModel.js"
+import {ProductModel} from "../models/product.models.js";
+import {CartModel} from "../models/cart.models.js";
 
 let ContenedorDaoProductos;
 let ContenedorDaoCarritos;
@@ -12,9 +11,9 @@ let databaseType = "mongo";
 switch(databaseType){
     case "archivos":
         const {ProductsDaoArchivos} = await import("./products/productsFiles.js");
-        //const {CartsDaoArchivos} = await import("./carts/cartsFiles.js");
+        const {CartsDaoArchivos} = await import("./carts/cartsFiles.js");
         ContenedorDaoProductos = new ProductsDaoArchivos(options.fileSystem.pathProducts);
-        //ContenedorDaoCarritos = new CartsDaoArchivos(options.fileSystem.pathCarts);
+        ContenedorDaoCarritos = new CartsDaoArchivos(options.fileSystem.pathCarts);
         break;
     case "sql":
         const {ProductosDaoSQL} = await import("./products/productsSql.js");
@@ -25,8 +24,8 @@ switch(databaseType){
     case "mongo":
         const {ProductosDaoMongo} = await import("./products/productsMongo.js");
         const {CarritosDaoMongo} = await import("./carts/cartsMongo.js");
-        ContenedorDaoProductos = new ProductosDaoMongo(productModel,sequenceModel, "producto_id");
-        ContenedorDaoCarritos = new CarritosDaoMongo(cartModel,sequenceModel,"carrito_id");        
+        ContenedorDaoProductos = new ProductosDaoMongo(ProductModel);
+        ContenedorDaoCarritos = new CarritosDaoMongo(CartModel);
         break;
 }
 

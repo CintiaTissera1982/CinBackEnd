@@ -1,0 +1,5 @@
+[2023-01-26T20:18:29.763] [FATAL] default - Hubo un error al conectar la base de datos MongoServerError: bad auth : authentication failed
+[2023-01-30T17:19:35.408] [FATAL] default - Hubo un error al conectar la base de datos MongoServerError: bad auth : authentication failed
+[2023-02-05T20:12:23.103] [ERROR] default - Hubo un error al enviar el mensaje de texto al usuario del registro Error: The 'To' number +544516719196 is not a valid phone number.
+[2023-02-05T20:14:57.134] [ERROR] default - Hubo un error al enviar el mensaje de texto al usuario del registro Error: The 'To' number +544516719196 is not a valid phone number.
+[2023-02-05T20:15:37.638] [ERROR] default - Hubo un error al enviar el mensaje de texto al usuario del registro Error: The 'To' number +544516719196 is not a valid phone number.

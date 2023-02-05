@@ -18,13 +18,9 @@ const createTables = async()=>{
         //1.crear la tabla productos
         await databaseSqliteDb.schema.createTable("productos",table=>{
             table.increments("id");
-            table.date("timestamp").nullable(false);
-            table.string("nombre",40).nullable(false);
-            table.string("descripcion",80).nullable(false);
-            table.integer("codigo").nullable(false);  
-            table.string("url",200).nullable(false);
-            table.integer("precio").nullable(false);
-            table.integer("stock").nullable(false)
+            table.string("title",40).nullable(false);
+            table.integer("price").nullable(false);
+            table.string("thumbnail",200).nullable(false);
         });
         console.log("productos table created");
 
